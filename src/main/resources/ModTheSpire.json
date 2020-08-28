@@ -1,0 +1,10 @@
+{
+  "modid": "ojb_betterpaths",
+  "name": "ojb's Better Paths Mod",
+  "author_list": ["ojb"],
+  "description": "Right click the map nodes to highlight potential pathing",
+  "version": "0.0.1",
+  "sts_version": "06-22-2020",
+  "mts_version": "2.6.0",
+  "dependencies": ["basemod"]
+}
