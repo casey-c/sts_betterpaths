@@ -5,6 +5,7 @@ import com.megacrit.cardcrawl.map.MapEdge;
 import com.megacrit.cardcrawl.map.MapRoomNode;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -110,5 +111,9 @@ public class DAGManager {
         }
 
         return manager;
+    }
+
+    public Collection<DAGObject> getAll() {
+        return all.values();
     }
 }

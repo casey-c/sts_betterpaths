@@ -1,3 +1,5 @@
+package highlight;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -43,5 +45,9 @@ public class NodeHighlight implements Renderable {
 
         sb.setColor(color);
         sb.draw(COLOR, hb.x - 18.0f * Settings.scale, hb.y - 18.0f * Settings.scale);
+    }
+
+    public void setVisible(boolean val) {
+        this.visible = val;
     }
 }

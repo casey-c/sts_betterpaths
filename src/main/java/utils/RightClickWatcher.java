@@ -1,5 +1,6 @@
+package utils;
+
 import basemod.BaseMod;
-import basemod.interfaces.PostUpdateSubscriber;
 import basemod.interfaces.PreRenderSubscriber;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.evacipated.cardcrawl.modthespire.lib.SpireInitializer;
@@ -8,7 +9,6 @@ import com.megacrit.cardcrawl.helpers.Hitbox;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.function.Consumer;
 
 /*

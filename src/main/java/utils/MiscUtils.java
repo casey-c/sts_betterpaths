@@ -19,7 +19,7 @@ public class MiscUtils {
             this.val = val;
         }
 
-        static ROOM_TYPE fromString(String id) {
+        public static ROOM_TYPE fromString(String id) {
             if (id == "?") return ROOM_TYPE.EVENT;
             else if (id == "$") return ROOM_TYPE.MERCHANT;
             else if (id == "T") return ROOM_TYPE.TREASURE;

@@ -1,23 +1,23 @@
 import basemod.BaseMod;
 import basemod.interfaces.PostInitializeSubscriber;
 import basemod.interfaces.PostUpdateSubscriber;
-import com.badlogic.gdx.graphics.Color;
 import com.evacipated.cardcrawl.modthespire.lib.SpireInitializer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.map.LegendItem;
-import com.megacrit.cardcrawl.map.MapRoomNode;
-import dag.DAGManager;
-import utils.PreTopBarRenderHelper;
+import highlight.HighlightManager;
+import legend.LegendHelper;
+import utils.MiscUtils;
+import utils.RightClickWatcher;
 
 import java.util.ArrayList;
 
 @SpireInitializer
 public class BetterPaths implements PostInitializeSubscriber, PostUpdateSubscriber {
-    private ArrayList<NodeHighlight> nodes = new ArrayList<>();
-    //private boolean initNodes = false;
     private HighlightMenu menu;
-    private DAGManager dagManager;
+    //private DAGManager dagManager;
+    private HighlightManager manager;
+    private LegendHelper legendHelper;
 
     public BetterPaths() {
         BaseMod.subscribe(this);
@@ -44,10 +44,13 @@ public class BetterPaths implements PostInitializeSubscriber, PostUpdateSubscrib
             // One time setup to get all the nodes of row 1
             //if (!initNodes) {
                 //initNodes = true;
-            if (dagManager == null) {
+            if (manager == null) {
                 //ArrayList<ArrayList<MapRoomNode>> mapNodes = CardCrawlGame.dungeon.getMap();
 
-                dagManager = DAGManager.build();
+                manager = new HighlightManager();
+
+                legendHelper = new LegendHelper(manager);
+                legendHelper.setup();
 
 //                int floorNum = 0;
 //                for (ArrayList<MapRoomNode> ns : mapNodes) {
@@ -55,8 +58,8 @@ public class BetterPaths implements PostInitializeSubscriber, PostUpdateSubscrib
 //                        if (n.room == null)
 //                            continue;
 //
-//                        NodeHighlight nb = new NodeHighlight(n.hb, new Color(1.0f, 0.0f, 0.0f, 0.5f));
-//                        RightClickWatcher.watchHB(nb.hb, this, onRightClick -> {
+//                        highlight.NodeHighlight nb = new highlight.NodeHighlight(n.hb, new Color(1.0f, 0.0f, 0.0f, 0.5f));
+//                        utils.RightClickWatcher.watchHB(nb.hb, this, onRightClick -> {
 //                            nb.toggle();
 //                        });
 //
@@ -69,17 +72,6 @@ public class BetterPaths implements PostInitializeSubscriber, PostUpdateSubscrib
 //
 //                System.out.println("OJB: finished init of " + nodes.size() + " nodes");
 
-                // TODO
-                //   Legend
-                // event (?), merchant ($), treasure (T), rest (R), monster (M), elite (E)
-//                ArrayList<LegendItem> legendItems = AbstractDungeon.dungeonMapScreen.map.legend.items;
-//                int itemID = 0;
-//                for (LegendItem item : legendItems) {
-//                    int finalItemID = itemID++;
-//                    RightClickWatcher.watchHB(item.hb, this, onRightClick -> {
-//                        System.out.println("legend right clicked: " + finalItemID);
-//                    });
-//                }
             }
 
             // TODO
