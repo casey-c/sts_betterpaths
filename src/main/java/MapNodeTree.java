@@ -8,45 +8,11 @@ import java.util.*;
 
 // A simplified version of the base game's storage of the map
 // Goal: easier to understand / work with than the original format
+/*
 public class MapNodeTree {
 
-    // event (?), merchant ($), treasure (T), rest (R), monster (M), elite (E)
-    public enum ROOM_TYPE {
-        EVENT("?", 0),
-        MERCHANT("$", 1),
-        TREASURE("T", 2),
-        REST("R", 3),
-        MONSTER("M", 4),
-        ELITE("E", 5),
-        NULL("*", 6);
 
-        private String id;
-        private int val;
-
-        ROOM_TYPE(String id, int val) {
-            this.id = id;
-            this.val = val;
-        }
-
-        static ROOM_TYPE fromString(String id) {
-            if (id == "?") return ROOM_TYPE.EVENT;
-            else if (id == "$") return ROOM_TYPE.MERCHANT;
-            else if (id == "T") return ROOM_TYPE.TREASURE;
-            else if (id == "R") return ROOM_TYPE.REST;
-            else if (id == "M") return ROOM_TYPE.MONSTER;
-            else if (id == "E") return ROOM_TYPE.ELITE;
-            else return ROOM_TYPE.NULL;
-        }
-
-        public String toString() {
-            return id;
-        }
-
-        public int toInt() {
-            return val;
-        }
-    }
-
+    /*
     // Connections are null if they don't exist
     private static class MapNodeTreeNode {
         private @NotNull
@@ -96,22 +62,22 @@ public class MapNodeTree {
         }
     }
 
-    private static class QueueObject {
-        public @Nullable MapRoomNode node;
-        public Key id;
-        public int floor;
-
-        public QueueObject(MapRoomNode node, Key id, int floor) {
-            this.node = node;
-            this.id = id;
-            this.floor = floor;
-        }
-
-        public QueueObject(Key id, int floor) {
-            this.id = id;
-            this.floor = floor;
-        }
-    }
+//    private static class QueueObject {
+//        public @Nullable MapRoomNode node;
+//        public Key id;
+//        public int floor;
+//
+//        public QueueObject(MapRoomNode node, Key id, int floor) {
+//            this.node = node;
+//            this.id = id;
+//            this.floor = floor;
+//        }
+//
+//        public QueueObject(Key id, int floor) {
+//            this.id = id;
+//            this.floor = floor;
+//        }
+//    }
 
 //    private static ArrayList<ArrayList<QueueObject>> initialLabeling(ArrayList<ArrayList<MapRoomNode>> unlabeled) {
 //        ArrayList<ArrayList<QueueObject>> labeledMapNodes = new ArrayList<>();
@@ -144,206 +110,12 @@ public class MapNodeTree {
 //        return map;
 //    }
 
-    private enum DIRECTION {
-        LEFT,
-        CENTER,
-        RIGHT,
-        NONE
-    }
 
-    private static class DAGObject {
-        public @Nullable MapRoomNode node;
-        public Key id;
-
-        public DAGObject srcLeft, srcCenter, srcRight;
-        public DAGObject targetLeft, targetCenter, targetRight;
-
-        public DAGObject(MapRoomNode node, Key id) {
-            this.node = node;
-            this.id = id;
-        }
-
-        public DAGObject(Key id) {
-            this.id = id;
-        }
-
-        public void printTargets() {
-            System.out.println("DAGObject: " + id.x + ", " + id.y);
-            if (targetLeft != null)
-                System.out.println("\tLeft TARGET: " + targetLeft.id.x + ", " + targetLeft.id.y);
-            if (targetCenter != null)
-                System.out.println("\tCenter TARGET: " + targetCenter.id.x + ", " + targetCenter.id.y);
-            if (targetRight != null)
-                System.out.println("\tRight TARGET: " + targetRight.id.x + ", " + targetRight.id.y);
-        }
-
-        public void printSources() {
-            System.out.println("DAGObject: " + id.x + ", " + id.y);
-            if (srcLeft != null)
-                System.out.println("\tLeft SOURCE: " + srcLeft.id.x + ", " + srcLeft.id.y);
-            if (srcCenter != null)
-                System.out.println("\tCenter SOURCE: " + srcCenter.id.x + ", " + srcCenter.id.y);
-            if (srcRight != null)
-                System.out.println("\tRight SOURCE: " + srcRight.id.x + ", " + srcRight.id.y);
-        }
-
-        public void setNode(MapRoomNode node) {
-            this.node = node;
-        }
-
-        public void setSource(DAGObject src, DIRECTION dir) {
-            if (dir == DIRECTION.LEFT)
-                srcLeft = src;
-            else if (dir == DIRECTION.CENTER)
-                srcCenter = src;
-            else if (dir == DIRECTION.RIGHT)
-                srcRight = src;
-        }
-
-        public void setTarget(DAGObject target, DIRECTION dir) {
-            if (dir == DIRECTION.LEFT)
-                targetLeft = target;
-            else if (dir == DIRECTION.CENTER)
-                targetCenter = target;
-            else if (dir == DIRECTION.RIGHT)
-                targetRight = target;
-        }
-    }
-
-    private static class DAGManager {
-        private HashMap<Key, DAGObject> all = new HashMap<>();
-        private HashMap<Key, DAGObject> elites = new HashMap<>();
-        private HashMap<Key, DAGObject> events = new HashMap<>();
-        private HashMap<Key, DAGObject> shops = new HashMap<>();
-        private HashMap<Key, DAGObject> monsters = new HashMap<>();
-        private HashMap<Key, DAGObject> treasures = new HashMap<>();
-        private HashMap<Key, DAGObject> rests = new HashMap<>();
-
-        private HashSet<Key> seeds;
-
-        public void build(HashMap<Key, DAGObject> input, HashSet<Key> seeds) {
-            this.seeds = seeds;
-
-            for (Key k : input.keySet()) {
-                insert(input.get(k));
-            }
-        }
-
-        public void print() {
-            System.out.println("DAGManager tracks: " + all.size() + " total nodes");
-            System.out.println("\t with elites: " + elites.size());
-            System.out.println("\t with events: " + events.size());
-            System.out.println("\t with shops: " + shops.size());
-            System.out.println("\t with monsters: " + monsters.size());
-            System.out.println("\t with treasures: " + treasures.size());
-            System.out.println("\t with rests: " + rests.size());
-        }
-
-        private void insert(DAGObject obj) {
-            if (obj.node == null) {
-                System.out.println("OJB: found a key with null node: " + obj.id.x + ", " + obj.id.y);
-                return;
-            }
-
-            all.put(obj.id, obj);
-
-            if (obj.node.getRoomSymbol(true) == "?")
-                events.put(obj.id, obj);
-            else if (obj.node.getRoomSymbol(true) == "E")
-                elites.put(obj.id, obj);
-            else if (obj.node.getRoomSymbol(true) == "$")
-                shops.put(obj.id, obj);
-            else if (obj.node.getRoomSymbol(true) == "M")
-                monsters.put(obj.id, obj);
-            else if (obj.node.getRoomSymbol(true) == "T")
-                treasures.put(obj.id, obj);
-            else if (obj.node.getRoomSymbol(true) == "R")
-                rests.put(obj.id, obj);
-        }
-    }
-
-    public static class Key {
-        private final int x;
-        private final int y;
-
-        public Key(int x, int y) {
-            this.x = x;
-            this.y = y;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (!(o instanceof Key)) return false;
-            Key key = (Key) o;
-            return x == key.x && y == key.y;
-        }
-
-        @Override
-        public int hashCode() {
-            int result = x;
-            result = 31 * result + y;
-            return result;
-        }
-    }
-
-    private static DIRECTION getDirection(int x1, int x2) {
-        if (x1 < x2)
-            return DIRECTION.RIGHT;
-        else if (x1 == x2)
-            return DIRECTION.CENTER;
-        else
-            return DIRECTION.LEFT;
-    }
-
-    public static void buildDAG() {
-        ArrayList<ArrayList<MapRoomNode>> mapNodes = CardCrawlGame.dungeon.getMap();
-        HashMap<Key, DAGObject> dag = new HashMap<>();
-        HashSet<Key> seeds = new HashSet<>();
-
-        int floor = 0;
-        for (ArrayList<MapRoomNode> ns : mapNodes) {
-            for (MapRoomNode n : ns) {
-                ArrayList<MapEdge> edges = n.getEdges();
-
-                if (edges.size() == 0)
-                    continue;
-
-                for (MapEdge e : edges) {
-                    Key k = new Key(e.srcX, e.srcY);
-                    DAGObject obj = dag.containsKey(k) ? dag.get(k) : new DAGObject(n, k);
-                    dag.put(k, obj);
-                    obj.setNode(n);
-
-                    if (floor == 0)
-                        seeds.add(k);
-
-                    Key kDst = new Key(e.dstX, e.dstY);
-                    DAGObject dst = dag.containsKey(kDst) ? dag.get(kDst) : new DAGObject(kDst);
-                    dag.put(kDst, dst);
-
-                    obj.setTarget(dst, getDirection(e.srcX, e.dstX));
-                    dst.setSource(obj, getDirection(e.dstX, e.srcX));
-                }
-            }
-
-            ++floor;
-        }
-
-        DAGManager manager = new DAGManager();
-        manager.build(dag, seeds);
-        manager.print();
-
-        System.out.println("Printing treasures only: ");
-        HashMap<Key, DAGObject> treasures = manager.treasures;
-        for (DAGObject t : treasures.values()) {
-            t.printTargets();
-            t.printSources();
-        }
-    }
+//    public static DAGManager buildDAG() {
+//
+//    }
 }
 
-    /*
     public static void buildTree() {
         ArrayList<ArrayList<MapRoomNode>> mapNodes = CardCrawlGame.dungeon.getMap();
 
@@ -468,5 +240,4 @@ public class MapNodeTree {
 
 
 }
-
      */

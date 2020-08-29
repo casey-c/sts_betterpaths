@@ -7,6 +7,7 @@ import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.map.LegendItem;
 import com.megacrit.cardcrawl.map.MapRoomNode;
+import dag.DAGManager;
 import utils.PreTopBarRenderHelper;
 
 import java.util.ArrayList;
@@ -14,8 +15,9 @@ import java.util.ArrayList;
 @SpireInitializer
 public class BetterPaths implements PostInitializeSubscriber, PostUpdateSubscriber {
     private ArrayList<NodeHighlight> nodes = new ArrayList<>();
-    private boolean initNodes = false;
+    //private boolean initNodes = false;
     private HighlightMenu menu;
+    private DAGManager dagManager;
 
     public BetterPaths() {
         BaseMod.subscribe(this);
@@ -40,43 +42,44 @@ public class BetterPaths implements PostInitializeSubscriber, PostUpdateSubscrib
                 menu = new HighlightMenu();
 
             // One time setup to get all the nodes of row 1
-            if (!initNodes) {
-                initNodes = true;
-                ArrayList<ArrayList<MapRoomNode>> mapNodes = CardCrawlGame.dungeon.getMap();
+            //if (!initNodes) {
+                //initNodes = true;
+            if (dagManager == null) {
+                //ArrayList<ArrayList<MapRoomNode>> mapNodes = CardCrawlGame.dungeon.getMap();
 
-                MapNodeTree.buildDAG();
+                dagManager = DAGManager.build();
 
-                int floorNum = 0;
-                for (ArrayList<MapRoomNode> ns : mapNodes) {
-                    for (MapRoomNode n : ns) {
-                        if (n.room == null)
-                            continue;
-
-                        NodeHighlight nb = new NodeHighlight(n.hb, new Color(1.0f, 0.0f, 0.0f, 0.5f));
-                        RightClickWatcher.watchHB(nb.hb, this, onRightClick -> {
-                            nb.toggle();
-                        });
-
-                        PreTopBarRenderHelper.addRenderable(nb);
-                        nodes.add(nb);
-                    }
-
-                    ++floorNum;
-                }
-
-                System.out.println("OJB: finished init of " + nodes.size() + " nodes");
+//                int floorNum = 0;
+//                for (ArrayList<MapRoomNode> ns : mapNodes) {
+//                    for (MapRoomNode n : ns) {
+//                        if (n.room == null)
+//                            continue;
+//
+//                        NodeHighlight nb = new NodeHighlight(n.hb, new Color(1.0f, 0.0f, 0.0f, 0.5f));
+//                        RightClickWatcher.watchHB(nb.hb, this, onRightClick -> {
+//                            nb.toggle();
+//                        });
+//
+//                        PreTopBarRenderHelper.addRenderable(nb);
+//                        nodes.add(nb);
+//                    }
+//
+//                    ++floorNum;
+//                }
+//
+//                System.out.println("OJB: finished init of " + nodes.size() + " nodes");
 
                 // TODO
-                // legend
+                //   Legend
                 // event (?), merchant ($), treasure (T), rest (R), monster (M), elite (E)
-                ArrayList<LegendItem> legendItems = AbstractDungeon.dungeonMapScreen.map.legend.items;
-                int itemID = 0;
-                for (LegendItem item : legendItems) {
-                    int finalItemID = itemID++;
-                    RightClickWatcher.watchHB(item.hb, this, onRightClick -> {
-                        System.out.println("legend right clicked: " + finalItemID);
-                    });
-                }
+//                ArrayList<LegendItem> legendItems = AbstractDungeon.dungeonMapScreen.map.legend.items;
+//                int itemID = 0;
+//                for (LegendItem item : legendItems) {
+//                    int finalItemID = itemID++;
+//                    RightClickWatcher.watchHB(item.hb, this, onRightClick -> {
+//                        System.out.println("legend right clicked: " + finalItemID);
+//                    });
+//                }
             }
 
             // TODO
