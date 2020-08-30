@@ -2,7 +2,7 @@
   "modid": "ojb_betterpaths",
   "name": "ojb's Better Paths Mod",
   "author_list": ["ojb"],
-  "description": "Right click the map nodes to highlight potential pathing",
+  "description": "Right click the map nodes to highlight potential pathing. Special support for Alt+Right+Click, SHIFT+Right+Click, and SHIFT+ALT+Right+Click on nodes. Also supports quick access to highlighting all nodes of a certain type (right click the items on the Legend).  Please see https://github.com/casey-c/sts_betterpaths for more details.",
   "version": "0.0.1",
   "sts_version": "06-22-2020",
   "mts_version": "2.6.0",
