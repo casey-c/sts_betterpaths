@@ -2,6 +2,7 @@ package highlight;
 
 import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.map.MapRoomNode;
+import dag.DAGObject;
 import utils.MiscUtils;
 import utils.PreTopBarRenderHelper;
 import utils.RightClickWatcher;
@@ -13,11 +14,14 @@ public class HighlightObject {
     private MapRoomNode node;
     private MiscUtils.ROOM_TYPE type;
 
+    private HighlightManager parent;
     private NodeHighlight highlight;
 
-    public HighlightObject(MapRoomNode node, Color color) {
+    public HighlightObject(HighlightManager parent, MapRoomNode node, Color color) {
+        this.parent = parent;
         this.id = globalID++;
         this.node = node;
+
         this.type = MiscUtils.ROOM_TYPE.fromString(node.getRoomSymbol(true));
 
         this.highlight = new NodeHighlight(node.hb, color);
@@ -25,8 +29,15 @@ public class HighlightObject {
 
     public void makeRightClickable() {
         RightClickWatcher.watchHB(node.hb, this, onRightClick -> {
-            highlight.toggle();
-            System.out.println("OJB: highlight toggled Node: " + id);
+            // TODO:
+            boolean forceX = MiscUtils.isAltPressed();
+
+            if (MiscUtils.isShiftPressed()) {
+                parent.setAllForcedFrom(id, highlight.isVisible(), forceX);
+            }
+            else {
+                highlight.toggleWithColor(parent.getColor(), forceX);
+            }
         });
         PreTopBarRenderHelper.addRenderable(highlight);
     }
@@ -39,7 +50,9 @@ public class HighlightObject {
         return this.type == type;
     }
 
-    public void setVisible(boolean val) {
+    public void setVisibleWithColor(boolean val, Color color, boolean forceX) {
         highlight.setVisible(val);
+        highlight.setColor(color);
+        highlight.setShowX(forceX);
     }
 }

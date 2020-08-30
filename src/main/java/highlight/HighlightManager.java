@@ -3,17 +3,35 @@ package highlight;
 import com.badlogic.gdx.graphics.Color;
 import dag.DAGManager;
 import dag.DAGObject;
+import org.jetbrains.annotations.Nullable;
 import utils.MiscUtils;
 import utils.MyColors;
+import utils.SoundHelper;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
 
 public class HighlightManager {
+
+    private static class MapStorageObject {
+        private int id;
+        private HighlightObject highlightObject;
+        private DAGObject dagObject;
+
+        public MapStorageObject(HighlightObject h, DAGObject d) {
+            this.id = h.getID();
+            this.highlightObject = h;
+            this.dagObject = d;
+        }
+    }
+
     //private ArrayList<HighlightObject> highlighted;
     private DAGManager dag;
-    private HashMap<Integer, HighlightObject> map = new HashMap<>();
+    private HashMap<Integer, MapStorageObject> map = new HashMap<>();
 
-    private Color currentColor = MyColors.BLUE_COLOR;
+    private Color currentColor = MyColors.LIGHT_BLUE;
 
     public HighlightManager() {
         dag = DAGManager.build();
@@ -22,17 +40,63 @@ public class HighlightManager {
 
     private void setupHighlightObjects() {
         for (DAGObject dagObject : dag.getAll()) {
-            HighlightObject highlightObject = new HighlightObject(dagObject.node, currentColor);
-            map.put(highlightObject.getID(), highlightObject);
-
+            HighlightObject highlightObject = new HighlightObject(this, dagObject.node, currentColor);
             highlightObject.makeRightClickable();
+
+            // Store for later
+            MapStorageObject storageObject = new MapStorageObject(highlightObject, dagObject);
+            dagObject.storageID = storageObject.id;
+
+            map.put(storageObject.id, storageObject);
         }
     }
 
-    public void setAllOfType(MiscUtils.ROOM_TYPE type, boolean val) {
-        for (HighlightObject obj : map.values()) {
+    private LinkedList<HighlightObject> getHighlightObjects() {
+        Collection<MapStorageObject> sto = map.values();
+
+        LinkedList<HighlightObject> res = new LinkedList<>();
+        for (MapStorageObject o : sto)
+            res.add(o.highlightObject);
+
+        return res;
+    }
+
+    public void setAllOfType(MiscUtils.ROOM_TYPE type, boolean val, boolean forceX) {
+        for (HighlightObject obj : getHighlightObjects())
             if (obj.isType(type))
-                obj.setVisible(val);
+                obj.setVisibleWithColor(val, currentColor, forceX);
+    }
+
+    public void setColor(Color color) {
+        currentColor = color;
+    }
+
+    public Color getColor() {
+        return currentColor;
+    }
+
+    private @Nullable DAGObject getDAGObjectFromHighlightID(int id) {
+        if (map.containsKey(id))
+            return map.get(id).dagObject;
+        else
+            return null;
+    }
+
+    public void setAllForcedFrom(int highlightID, boolean wasSet, boolean forceX) {
+        DAGObject seed = getDAGObjectFromHighlightID(highlightID);
+        if (seed == null)
+            return;
+
+        ArrayList<DAGObject> list = dag.getForcedFrom(seed);
+
+        for (DAGObject d : list) {
+            int id = d.storageID;
+            if (map.containsKey(id)) {
+                MapStorageObject storageObject = map.get(id);
+                storageObject.highlightObject.setVisibleWithColor(!wasSet, currentColor, forceX);
+            }
         }
+
+        SoundHelper.playDeck(!wasSet);
     }
 }

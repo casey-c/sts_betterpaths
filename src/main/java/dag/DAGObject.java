@@ -12,6 +12,8 @@ public class DAGObject {
     public DAGObject srcLeft, srcCenter, srcRight;
     public DAGObject targetLeft, targetCenter, targetRight;
 
+    public int storageID = -1;
+
     public DAGObject(MapRoomNode node, Key key) {
         this.node = node;
         this.key = key;
@@ -61,5 +63,41 @@ public class DAGObject {
             targetCenter = target;
         else if (dir == Direction.RIGHT)
             targetRight = target;
+    }
+
+    public @Nullable DAGObject getOnlySourceOrNull() {
+        int l = (srcLeft == null) ? 0 : 1;
+        int c = (srcCenter == null) ? 0 : 1;
+        int r = (srcRight == null) ? 0 : 1;
+
+        if ((l + c + r) == 1) {
+            if (srcLeft != null)
+                return srcLeft;
+            else if (srcCenter != null)
+                return srcCenter;
+            else
+                return srcRight;
+        }
+        else {
+            return null;
+        }
+    }
+
+    public @Nullable DAGObject getOnlyTargetOrNull() {
+        int l = (targetLeft == null) ? 0 : 1;
+        int c = (targetCenter == null) ? 0 : 1;
+        int r = (targetRight == null) ? 0 : 1;
+
+        if ((l + c + r) == 1) {
+            if (targetLeft != null)
+                return targetLeft;
+            else if (targetCenter != null)
+                return targetCenter;
+            else
+                return targetRight;
+        }
+        else {
+            return null;
+        }
     }
 }

@@ -13,22 +13,41 @@ public class NodeHighlight implements Renderable {
     private Color color;
     private boolean visible = false;
     public Hitbox hb;
+    private boolean showX = false;
 
     private final static Texture BACKGROUND = new Texture("images/highlight/background.png");
     private final static Texture COLOR = new Texture("images/highlight/color.png");
+    private final static Texture X = new Texture("images/highlight/map_x.png");
 
     public NodeHighlight(Hitbox hb, Color color) {
         this.color = color;
         this.hb = hb;
     }
 
-    public void toggle() {
-        visible = !visible;
+    public boolean isVisible() {
+        return visible;
+    }
 
-        if (visible)
-            CardCrawlGame.sound.play("DECK_OPEN");
-        else
-            CardCrawlGame.sound.play("DECK_CLOSE");
+    public void setShowX(boolean val) {
+        this.showX = val;
+    }
+
+    public void toggleWithColor(Color newColor, boolean forceX) {
+        this.showX = forceX;
+
+        // Special case: just update the color to the new one
+        if (visible && newColor != this.color) {
+            this.color = newColor;
+        }
+        else {
+            visible = !visible;
+            this.color = newColor;
+
+            if (visible)
+                CardCrawlGame.sound.play("DECK_OPEN");
+            else
+                CardCrawlGame.sound.play("DECK_CLOSE");
+        }
     }
 
 
@@ -45,9 +64,16 @@ public class NodeHighlight implements Renderable {
 
         sb.setColor(color);
         sb.draw(COLOR, hb.x - 18.0f * Settings.scale, hb.y - 18.0f * Settings.scale);
+
+        if (showX)
+            sb.draw(X, hb.x - 18.0f * Settings.scale, hb.y - 18.0f * Settings.scale);
     }
 
     public void setVisible(boolean val) {
         this.visible = val;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
     }
 }

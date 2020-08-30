@@ -1,5 +1,8 @@
 package utils;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+
 public class MiscUtils {
     // event (?), merchant ($), treasure (T), rest (R), monster (M), elite (E)
     public enum ROOM_TYPE {
@@ -36,6 +39,18 @@ public class MiscUtils {
         public int toInt() {
             return val;
         }
+    }
+
+    public static boolean isShiftPressed() {
+        return Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT);
+    }
+
+    public static boolean isControlPressed() {
+        return Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) || Gdx.input.isKeyPressed(Input.Keys.CONTROL_RIGHT);
+    }
+
+    public static boolean isAltPressed() {
+        return Gdx.input.isKeyPressed(Input.Keys.ALT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.ALT_RIGHT); // yuck
     }
 
 }

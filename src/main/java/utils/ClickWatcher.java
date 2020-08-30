@@ -1,3 +1,5 @@
+package utils;
+
 import basemod.BaseMod;
 import basemod.interfaces.PreRenderSubscriber;
 import com.badlogic.gdx.graphics.OrthographicCamera;

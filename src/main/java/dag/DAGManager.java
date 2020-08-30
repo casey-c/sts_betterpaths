@@ -116,4 +116,29 @@ public class DAGManager {
     public Collection<DAGObject> getAll() {
         return all.values();
     }
+
+    public ArrayList<DAGObject> getForcedFrom(DAGObject obj) {
+        ArrayList<DAGObject> list = new ArrayList<>();
+
+        // TODO
+        // SOURCES (DOWN)
+        DAGObject next = obj;
+        do {
+            next = next.getOnlySourceOrNull();
+            if (next != null)
+                list.add(next);
+        } while (next != null);
+
+        // TARGETS (UP)
+        next = obj;
+        do {
+            next = next.getOnlyTargetOrNull();
+            if (next != null)
+                list.add(next);
+        } while (next != null);
+
+        // Add the original center object
+        list.add(obj);
+        return list;
+    }
 }

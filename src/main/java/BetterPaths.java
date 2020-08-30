@@ -4,20 +4,14 @@ import basemod.interfaces.PostUpdateSubscriber;
 import com.evacipated.cardcrawl.modthespire.lib.SpireInitializer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import com.megacrit.cardcrawl.map.LegendItem;
 import highlight.HighlightManager;
 import legend.LegendHelper;
-import utils.MiscUtils;
-import utils.RightClickWatcher;
-
-import java.util.ArrayList;
+import menu.HighlightMenu;
 
 @SpireInitializer
 public class BetterPaths implements PostInitializeSubscriber, PostUpdateSubscriber {
     private HighlightMenu menu;
-    //private DAGManager dagManager;
-    private HighlightManager manager;
-    private LegendHelper legendHelper;
+
 
     public BetterPaths() {
         BaseMod.subscribe(this);
@@ -41,44 +35,14 @@ public class BetterPaths implements PostInitializeSubscriber, PostUpdateSubscrib
             if (menu == null)
                 menu = new HighlightMenu();
 
-            // One time setup to get all the nodes of row 1
-            //if (!initNodes) {
-                //initNodes = true;
-            if (manager == null) {
-                //ArrayList<ArrayList<MapRoomNode>> mapNodes = CardCrawlGame.dungeon.getMap();
-
-                manager = new HighlightManager();
-
-                legendHelper = new LegendHelper(manager);
-                legendHelper.setup();
-
-//                int floorNum = 0;
-//                for (ArrayList<MapRoomNode> ns : mapNodes) {
-//                    for (MapRoomNode n : ns) {
-//                        if (n.room == null)
-//                            continue;
+            // TODO: reupdate on map change or character change etc.
+//            if (manager == null) {
+//                manager = new HighlightManager();
 //
-//                        highlight.NodeHighlight nb = new highlight.NodeHighlight(n.hb, new Color(1.0f, 0.0f, 0.0f, 0.5f));
-//                        utils.RightClickWatcher.watchHB(nb.hb, this, onRightClick -> {
-//                            nb.toggle();
-//                        });
+//                legendHelper = new LegendHelper(manager);
+//                legendHelper.setup();
 //
-//                        PreTopBarRenderHelper.addRenderable(nb);
-//                        nodes.add(nb);
-//                    }
-//
-//                    ++floorNum;
-//                }
-//
-//                System.out.println("OJB: finished init of " + nodes.size() + " nodes");
-
-            }
-
-            // TODO
-//            if (AbstractDungeon.dungeonMapScreen.map.legend.isIconHovered("E"))
-//                System.out.println("Elite legend highlighted?");
-//            if (AbstractDungeon.dungeonMapScreen.map.legend.isIconHovered("$"))
-//                System.out.println("Store legend highlighted?");
+//            }
         }
     }
 }
