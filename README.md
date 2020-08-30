@@ -1,6 +1,8 @@
 # Better Paths
 A better map highlighting mod for Slay the Spire
 
+![Better Paths](github/screenshot.png)
+
 ### Current features (WIP)
 * Right click nodes to toggle highlighting; they will use the currently selected color
 * SHIFT+right click nodes to toggle all "forced" nodes (i.e. nodes that you *must* path through to get to the one right clicked on)
