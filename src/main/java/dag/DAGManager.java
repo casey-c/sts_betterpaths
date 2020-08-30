@@ -1,6 +1,7 @@
 package dag;
 
 import com.megacrit.cardcrawl.core.CardCrawlGame;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.map.MapEdge;
 import com.megacrit.cardcrawl.map.MapRoomNode;
 
@@ -69,7 +70,25 @@ public class DAGManager {
         HashMap<Key, DAGObject> dag = new HashMap<>();
         HashSet<Key> seeds = new HashSet<>();
 
-        int floor = 0;
+        //int floor = 1;
+        // TODO: verify
+        int floor;
+        if (AbstractDungeon.floorNum < 17)
+            floor = 1;
+        else if (AbstractDungeon.floorNum < 34)
+            floor = 18;
+        else if (AbstractDungeon.floorNum < 51)
+            floor = 35;
+        else if (AbstractDungeon.ascensionLevel == 20)
+            floor = 53;
+        else
+            floor = 52;
+
+//        if (AbstractDungeon.floorNum < 17)
+//            floor = 0;
+//        else if (AbstractDungeon.floorNum < 34)
+//            floor = 0;
+
         for (ArrayList<MapRoomNode> ns : mapNodes) {
             for (MapRoomNode n : ns) {
                 ArrayList<MapEdge> edges = n.getEdges();
@@ -79,7 +98,18 @@ public class DAGManager {
 
                 for (MapEdge e : edges) {
                     Key k = new Key(e.srcX, e.srcY);
-                    DAGObject obj = dag.containsKey(k) ? dag.get(k) : new DAGObject(n, k);
+
+                    System.out.println("OJB: dag build: " + k.toString());
+                    System.out.println("OJB: dag contains that key?: " + dag.containsKey(k));
+                    System.out.println("DAG SIZE = " + dag.size());
+
+                    if (dag.containsKey(k)) {
+                        System.out.print("OJB: dag apparently contains that key already, which looks like: ");
+                        DAGObject o = dag.get(k);
+                        System.out.println(o.key.toString());
+                    }
+
+                    DAGObject obj = dag.containsKey(k) ? dag.get(k) : new DAGObject(n, floor, k);
                     dag.put(k, obj);
                     obj.setNode(n);
 
@@ -87,7 +117,12 @@ public class DAGManager {
                         seeds.add(k);
 
                     Key kDst = new Key(e.dstX, e.dstY);
-                    DAGObject dst = dag.containsKey(kDst) ? dag.get(kDst) : new DAGObject(kDst);
+
+                    System.out.println("OJB: dag build: " + kDst.toString());
+                    System.out.println("OJB: dag contains that key?: " + dag.containsKey(kDst));
+                    System.out.println("DAG SIZE = " + dag.size());
+
+                    DAGObject dst = dag.containsKey(kDst) ? dag.get(kDst) : new DAGObject(floor, kDst);
                     dag.put(kDst, dst);
 
                     obj.setTarget(dst, Direction.getDirection(e.srcX, e.dstX));

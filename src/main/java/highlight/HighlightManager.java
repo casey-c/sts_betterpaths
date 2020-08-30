@@ -3,6 +3,7 @@ package highlight;
 import com.badlogic.gdx.graphics.Color;
 import dag.DAGManager;
 import dag.DAGObject;
+import legend.LegendHelper;
 import org.jetbrains.annotations.Nullable;
 import utils.MiscUtils;
 import utils.MyColors;
@@ -29,18 +30,34 @@ public class HighlightManager {
 
     //private ArrayList<HighlightObject> highlighted;
     private DAGManager dag;
+    private LegendHelper legendHelper;
     private HashMap<Integer, MapStorageObject> map = new HashMap<>();
 
     private Color currentColor = MyColors.LIGHT_BLUE;
+    private static boolean hideUnreachable = false; // TODO config?
 
     public HighlightManager() {
+        legendHelper = new LegendHelper(this);
+        legendHelper.setup();
+    }
+
+    public void build() {
         dag = DAGManager.build();
         setupHighlightObjects();
+        legendHelper.reset();
+    }
+
+    public void setHideUnreachable(boolean val) {
+        this.hideUnreachable = val;
+    }
+
+    public static boolean getHideUnreachable() {
+        return hideUnreachable;
     }
 
     private void setupHighlightObjects() {
         for (DAGObject dagObject : dag.getAll()) {
-            HighlightObject highlightObject = new HighlightObject(this, dagObject.node, currentColor);
+            HighlightObject highlightObject = new HighlightObject(this, dagObject.floor, dagObject.node, currentColor);
             highlightObject.makeRightClickable();
 
             // Store for later
@@ -98,5 +115,17 @@ public class HighlightManager {
         }
 
         SoundHelper.playDeck(!wasSet);
+    }
+
+    public void clearAll() {
+        for (HighlightObject o : getHighlightObjects()) {
+            o.setVisibleWithColor(false, currentColor, false);
+        }
+        legendHelper.reset();
+    }
+
+    public void reset() {
+        clearAll();
+        map.clear();
     }
 }

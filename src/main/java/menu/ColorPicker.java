@@ -130,7 +130,7 @@ public class ColorPicker {
         objects.add(redx);
 
         // TODO: load from config?
-        select(purple);
+        select(white);
     }
 
     public boolean isVisible() {

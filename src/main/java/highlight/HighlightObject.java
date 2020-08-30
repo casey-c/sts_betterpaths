@@ -17,18 +17,18 @@ public class HighlightObject {
     private HighlightManager parent;
     private NodeHighlight highlight;
 
-    public HighlightObject(HighlightManager parent, MapRoomNode node, Color color) {
+    public HighlightObject(HighlightManager parent, int floor, MapRoomNode node, Color color) {
         this.parent = parent;
         this.id = globalID++;
         this.node = node;
 
         this.type = MiscUtils.ROOM_TYPE.fromString(node.getRoomSymbol(true));
 
-        this.highlight = new NodeHighlight(node.hb, color);
+        this.highlight = new NodeHighlight(node.hb, floor, color);
     }
 
     public void makeRightClickable() {
-        RightClickWatcher.watchHB(node.hb, this, onRightClick -> {
+        RightClickWatcher.watchHbTemp(node.hb, this, onRightClick -> {
             // TODO:
             boolean forceX = MiscUtils.isAltPressed();
 

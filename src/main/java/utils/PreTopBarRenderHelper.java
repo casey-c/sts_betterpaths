@@ -34,4 +34,9 @@ public class PreTopBarRenderHelper {
         }
     }
 
+    public static void clearAll() {
+        PreTopBarRenderHelper instance = getInstance();
+        instance.renderables.clear();
+    }
+
 }

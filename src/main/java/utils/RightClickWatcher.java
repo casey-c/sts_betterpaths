@@ -16,6 +16,11 @@ import java.util.function.Consumer;
  */
 @SpireInitializer
 public class RightClickWatcher implements PreRenderSubscriber {
+    // Singleton pattern
+    private static class RightClickWatcherHolder { private static final RightClickWatcher INSTANCE = new RightClickWatcher(); }
+    private static RightClickWatcher getInstance() { return RightClickWatcherHolder.INSTANCE; }
+
+    // Simple storage object
     private static class HitboxMapObject {
         private Hitbox hb;
         private Consumer<Object> onRightClick;
@@ -33,20 +38,13 @@ public class RightClickWatcher implements PreRenderSubscriber {
         }
     }
 
-    private ArrayList<HitboxMapObject> trackedHB;
+    private ArrayList<HitboxMapObject> permTrackedHB = new ArrayList<>();
+    private ArrayList<HitboxMapObject> tempTrackedHB = new ArrayList<>();
+
     private boolean mouseDownRight = false;
 
-    // Singleton pattern
-    private static class RightClickWatcherHolder {
-        private static final RightClickWatcher INSTANCE = new RightClickWatcher();
-    }
-
-    private static RightClickWatcher getInstance() {
-        return RightClickWatcherHolder.INSTANCE;
-    }
 
     public RightClickWatcher() {
-        trackedHB = new ArrayList<>();
         BaseMod.subscribe(this);
     }
 
@@ -54,15 +52,29 @@ public class RightClickWatcher implements PreRenderSubscriber {
         new RightClickWatcherHolder();
     }
 
-    public static void watchHB(Hitbox hb, Object item, Consumer<Object> onRightClick) {
+    public static void clearTemporaryHB() {
+        RightClickWatcher watcher = getInstance();
+        watcher.tempTrackedHB.clear();
+    }
+
+    public static void watchHbTemp(Hitbox hb, Object item, Consumer<Object> onRightClick) {
         RightClickWatcher watcher = getInstance();
 
         HitboxMapObject obj = new HitboxMapObject(hb, item, onRightClick);
-        watcher.trackedHB.add(obj);
+        watcher.tempTrackedHB.add(obj);
+    }
+
+    public static void watchHbPermanent(Hitbox hb, Object item, Consumer<Object> onRightClick) {
+        RightClickWatcher watcher = getInstance();
+
+        HitboxMapObject obj = new HitboxMapObject(hb, item, onRightClick);
+        watcher.permTrackedHB.add(obj);
     }
 
     private void rightClickHandler() {
-        for (HitboxMapObject obj : trackedHB)
+        for (HitboxMapObject obj : permTrackedHB)
+            obj.rightClick();
+        for (HitboxMapObject obj : tempTrackedHB)
             obj.rightClick();
     }
 

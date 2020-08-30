@@ -14,13 +14,15 @@ public class NodeHighlight implements Renderable {
     private boolean visible = false;
     public Hitbox hb;
     private boolean showX = false;
+    private int floor;
 
     private final static Texture BACKGROUND = new Texture("images/highlight/background.png");
     private final static Texture COLOR = new Texture("images/highlight/color.png");
     private final static Texture X = new Texture("images/highlight/map_x.png");
 
-    public NodeHighlight(Hitbox hb, Color color) {
+    public NodeHighlight(Hitbox hb, int floor, Color color) {
         this.color = color;
+        this.floor = floor;
         this.hb = hb;
     }
 
@@ -57,6 +59,10 @@ public class NodeHighlight implements Renderable {
             return;
 
         if (!visible)
+            return;
+
+        // TODO
+        if (HighlightManager.getHideUnreachable() && (floor < AbstractDungeon.floorNum))
             return;
 
         sb.setColor(Color.WHITE);

@@ -13,13 +13,17 @@ public class DAGObject {
     public DAGObject targetLeft, targetCenter, targetRight;
 
     public int storageID = -1;
+    public int floor;
 
-    public DAGObject(MapRoomNode node, Key key) {
+    public DAGObject(MapRoomNode node, int floor, Key key) {
         this.node = node;
         this.key = key;
+        this.floor = floor;
+        System.out.println("OJB: created a DAG object with key " + key.x + " " + key.y + " | " + floor);
     }
 
-    public DAGObject(Key key) {
+    public DAGObject(int floor, Key key) {
+        this.floor = floor;
         this.key = key;
     }
 

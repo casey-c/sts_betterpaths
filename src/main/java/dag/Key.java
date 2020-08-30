@@ -23,4 +23,9 @@ public class Key {
         result = 31 * result + y;
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "Key: (" + x + ", " + y + ")";
+    }
 }
