@@ -99,14 +99,8 @@ public class DAGManager {
                 for (MapEdge e : edges) {
                     Key k = new Key(e.srcX, e.srcY);
 
-                    System.out.println("OJB: dag build: " + k.toString());
-                    System.out.println("OJB: dag contains that key?: " + dag.containsKey(k));
-                    System.out.println("DAG SIZE = " + dag.size());
-
                     if (dag.containsKey(k)) {
-                        System.out.print("OJB: dag apparently contains that key already, which looks like: ");
                         DAGObject o = dag.get(k);
-                        System.out.println(o.key.toString());
                     }
 
                     DAGObject obj = dag.containsKey(k) ? dag.get(k) : new DAGObject(n, floor, k);
@@ -118,9 +112,6 @@ public class DAGManager {
 
                     Key kDst = new Key(e.dstX, e.dstY);
 
-                    System.out.println("OJB: dag build: " + kDst.toString());
-                    System.out.println("OJB: dag contains that key?: " + dag.containsKey(kDst));
-                    System.out.println("DAG SIZE = " + dag.size());
 
                     DAGObject dst = dag.containsKey(kDst) ? dag.get(kDst) : new DAGObject(floor, kDst);
                     dag.put(kDst, dst);
@@ -135,15 +126,14 @@ public class DAGManager {
 
         DAGManager manager = new DAGManager();
         manager.set(dag, seeds);
-        manager.print();
+//        manager.print();
 
         // Debug
-        System.out.println("Printing treasures only: ");
-        HashMap<Key, DAGObject> treasures = manager.treasures;
-        for (DAGObject t : treasures.values()) {
-            t.printTargets();
-            t.printSources();
-        }
+//        HashMap<Key, DAGObject> treasures = manager.treasures;
+//        for (DAGObject t : treasures.values()) {
+//            t.printTargets();
+//            t.printSources();
+//        }
 
         return manager;
     }

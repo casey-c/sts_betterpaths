@@ -27,6 +27,7 @@ public class DAGObject {
         this.key = key;
     }
 
+    // DEBUG
     public void printTargets() {
         System.out.println("DAGObject: " + key.x + ", " + key.y);
         if (targetLeft != null)
@@ -37,6 +38,7 @@ public class DAGObject {
             System.out.println("\tRight TARGET: " + targetRight.key.x + ", " + targetRight.key.y);
     }
 
+    // DEBUG
     public void printSources() {
         System.out.println("DAGObject: " + key.x + ", " + key.y);
         if (srcLeft != null)

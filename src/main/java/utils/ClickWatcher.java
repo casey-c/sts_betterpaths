@@ -52,7 +52,6 @@ public class ClickWatcher implements PreRenderSubscriber {
     }
 
     private void clickHandler() {
-        System.out.println("OJB: click() fired");
         for (HitboxMapObject obj : trackedHB)
             obj.click();
     }
