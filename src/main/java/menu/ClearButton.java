@@ -19,8 +19,8 @@ public class ClearButton {
 
     private Hitbox hb;
 
-    private static final float BUTTON_WIDTH = 250.0f;
-    private static final float BUTTON_HEIGHT = 50.0f;
+    private static final float BUTTON_WIDTH = 250.0f * Settings.scale;
+    private static final float BUTTON_HEIGHT = 50.0f * Settings.scale;
 
     private static final Texture BUTTON_DEFAULT = new Texture("images/button/button_default.png");
     private static final Texture BUTTON_HOVER = new Texture("images/button/button_hover.png");
@@ -66,14 +66,14 @@ public class ClearButton {
 
         if (hb.hovered) {
             if (InputHelper.isMouseDown) {
-                sb.draw(BUTTON_CLICK, x, y);
+                sb.draw(BUTTON_CLICK, x, y, BUTTON_WIDTH, BUTTON_HEIGHT);
             }
             else {
-                sb.draw(BUTTON_HOVER, x, y);
+                sb.draw(BUTTON_HOVER, x, y, BUTTON_WIDTH, BUTTON_HEIGHT);
             }
         }
         else {
-            sb.draw(BUTTON_DEFAULT, x, y);
+            sb.draw(BUTTON_DEFAULT, x, y, BUTTON_WIDTH, BUTTON_HEIGHT);
         }
 
         // text

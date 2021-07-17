@@ -20,8 +20,8 @@ public class Checkbox {
     private Hitbox hb;
     private Consumer<Checkbox> onToggle;
 
-    public static final float BUTTON_WIDTH = 32.0f;
-    public static final float BUTTON_HEIGHT = 32.0f;
+    public static final float BUTTON_WIDTH = 32.0f * Settings.scale;
+    public static final float BUTTON_HEIGHT = 32.0f * Settings.scale;
 
     private static final Texture CHECKBOX_DEFAULT = new Texture("images/checkbox/checkbox.png");
     private static final Texture CHECKBOX_CHECKED = new Texture("images/checkbox/checkbox_checked.png");
@@ -81,10 +81,10 @@ public class Checkbox {
         sb.setColor(Color.WHITE);
 
         if (checked) {
-            sb.draw(CHECKBOX_CHECKED, x, y);
+            sb.draw(CHECKBOX_CHECKED, x, y, BUTTON_WIDTH, BUTTON_HEIGHT);
         }
         else {
-            sb.draw(CHECKBOX_DEFAULT, x, y);
+            sb.draw(CHECKBOX_DEFAULT, x, y, BUTTON_WIDTH, BUTTON_HEIGHT);
         }
 
         hb.render(sb);

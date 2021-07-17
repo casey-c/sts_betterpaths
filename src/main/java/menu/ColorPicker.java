@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
+import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.Hitbox;
 import utils.ClickWatcher;
 import utils.MiscUtils;
@@ -18,8 +19,8 @@ public class ColorPicker {
         private static final Texture TEX_FRAME = new Texture("images/colorpicker/color_picker_frame.png");
         private static final Texture TEX_X = new Texture("images/colorpicker/x.png");
 
-        public static final float TEX_WIDTH = 40.0f;
-        public static final float TEX_HEIGHT = 40.0f;
+        public static final float TEX_WIDTH = 40.0f * Settings.scale;
+        public static final float TEX_HEIGHT = 40.0f * Settings.scale;
 
         private Color color;
         private static final Color BORDER_COLOR_NOT_SELECTED = MyColors.GRAY_BORDER_COLOR;
@@ -79,18 +80,18 @@ public class ColorPicker {
 
             // Draw the color area
             sb.setColor(color);
-            sb.draw(TEX_COLOR, x, y);
+            sb.draw(TEX_COLOR, x, y, TEX_WIDTH, TEX_HEIGHT);
 
             if (selected)
                 sb.setColor(BORDER_COLOR_SELECTED);
             else
                 sb.setColor(BORDER_COLOR_NOT_SELECTED);
 
-            sb.draw(TEX_FRAME, x, y);
+            sb.draw(TEX_FRAME, x, y, TEX_WIDTH, TEX_HEIGHT);
 
             if (MiscUtils.isAltPressed()) {
                 sb.setColor(Color.WHITE);
-                sb.draw(TEX_X, x, y);
+                sb.draw(TEX_X, x, y, TEX_WIDTH, TEX_HEIGHT);
             }
 
         }
@@ -99,7 +100,7 @@ public class ColorPicker {
 //    public static final Color COLOR_PURPLE = new Color(0.914f, 0.478f, 0.937f, 0.8f);
 //    public static final Color COLOR_GREEN = new Color(0.0f, 1.0f, 0.0f, 0.8f);
 
-    private static final float PADDING = 7.0f;
+    private static final float PADDING = 7.0f * Settings.scale;
 
     private float x, y;
 

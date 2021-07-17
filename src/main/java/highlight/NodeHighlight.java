@@ -20,6 +20,9 @@ public class NodeHighlight implements Renderable {
     private final static Texture COLOR = new Texture("images/highlight/color.png");
     private final static Texture X = new Texture("images/highlight/map_x.png");
 
+    public static final float HIGHLIGHT_WIDTH = 100.0f * Settings.scale;
+    public static final float HIGHLIGHT_HEIGHT = 100.0f * Settings.scale;
+
     public NodeHighlight(Hitbox hb, int floor, Color color) {
         this.color = color;
         this.floor = floor;
@@ -66,13 +69,13 @@ public class NodeHighlight implements Renderable {
             return;
 
         sb.setColor(Color.WHITE);
-        sb.draw(BACKGROUND, hb.x - 18.0f * Settings.scale, hb.y - 18.0f * Settings.scale);
+        sb.draw(BACKGROUND, hb.x - 18.0f * Settings.scale, hb.y - 18.0f * Settings.scale, HIGHLIGHT_WIDTH, HIGHLIGHT_HEIGHT);
 
         sb.setColor(color);
-        sb.draw(COLOR, hb.x - 18.0f * Settings.scale, hb.y - 18.0f * Settings.scale);
+        sb.draw(COLOR, hb.x - 18.0f * Settings.scale, hb.y - 18.0f * Settings.scale, HIGHLIGHT_WIDTH, HIGHLIGHT_HEIGHT);
 
         if (showX)
-            sb.draw(X, hb.x - 18.0f * Settings.scale, hb.y - 18.0f * Settings.scale);
+            sb.draw(X, hb.x - 18.0f * Settings.scale, hb.y - 18.0f * Settings.scale, HIGHLIGHT_WIDTH, HIGHLIGHT_HEIGHT);
     }
 
     public void setVisible(boolean val) {
