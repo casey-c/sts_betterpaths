@@ -20,17 +20,19 @@ public class HighlightMenu implements RenderSubscriber {
     public static HighlightMenu getInstance() { return HighlightMenuHolder.INSTANCE; }
 
     private static final Texture SCREEN = new Texture("images/highlight_menu.png");
-    private static final float SCREEN_X = 1486.0f;
-    private static final float SCREEN_Y = 67.0f;
+    public static final float SCREEN_WIDTH = 360.0f * Settings.scale;
+    public static final float SCREEN_HEIGHT = 245.0f * Settings.scale;
+    private static final float SCREEN_X = 1670.0f * Settings.xScale - SCREEN_WIDTH / 2;
+    private static final float SCREEN_Y = 67.0f * Settings.yScale;
 
-    private static final float CONTENT_X = 37.0f;
-    private static final float CHECKBOX_X = 230.0f;
+    private static final float CONTENT_X = 37.0f * Settings.scale;
+    private static final float CHECKBOX_X = 230.0f * Settings.scale;
 
-    private static final float TITLE_Y = 209.0f;
-    private static final float COLOR_PICKER_Y = 130.0f;
-    private static final float UNREACHABLE_Y = 112.0f;
-    private static final float BUTTON_Y = 28.0f;
-    private static final float CHECKBOX_Y = UNREACHABLE_Y - Checkbox.BUTTON_HEIGHT + 8.0f;
+    private static final float TITLE_Y = 209.0f * Settings.scale;
+    private static final float COLOR_PICKER_Y = 130.0f * Settings.scale;
+    private static final float UNREACHABLE_Y = 112.0f * Settings.scale;
+    private static final float BUTTON_Y = 28.0f * Settings.scale;
+    private static final float CHECKBOX_Y = UNREACHABLE_Y - Checkbox.BUTTON_HEIGHT + 8.0f * Settings.scale;
 
     private HighlightManager manager;
     //private LegendHelper legendHelper;
@@ -102,7 +104,7 @@ public class HighlightMenu implements RenderSubscriber {
 
         // background
         sb.setColor(Color.WHITE);
-        sb.draw(SCREEN, SCREEN_X, SCREEN_Y);
+        sb.draw(SCREEN, SCREEN_X, SCREEN_Y, SCREEN_WIDTH, SCREEN_HEIGHT);
 
         // title text
         FontHelper.renderFontLeftTopAligned(sb, FontHelper.tipBodyFont, "Highlight Menu", SCREEN_X + CONTENT_X, SCREEN_Y + TITLE_Y, Settings.GOLD_COLOR);
